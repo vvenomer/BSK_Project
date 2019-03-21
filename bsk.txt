@@ -4,6 +4,7 @@ upload image
 		-> else allow upload
 			save pic
 			save info in db along with user name/id
+--done--
 browse
 	personal
 		if not logged in
@@ -12,3 +13,9 @@ browse
 	general
 		list all with public tag
 			allow comments / likes
+			
+doTo: 
+
+after clicking upload while not logged in -> add message, that would explain redirection
+improve processing sent image
+improve form

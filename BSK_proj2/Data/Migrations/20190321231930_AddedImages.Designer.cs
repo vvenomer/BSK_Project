@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BSK_proj2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190321003636_AddingPhotos")]
-    partial class AddingPhotos
+    [Migration("20190321231930_AddedImages")]
+    partial class AddedImages
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,13 +21,21 @@ namespace BSK_proj2.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BSK_proj2.Models.Photo", b =>
+            modelBuilder.Entity("BSK_proj2.Models.Image", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Access");
+
+                    b.Property<bool>("Comment");
+
+                    b.Property<bool>("Like");
+
                     b.Property<string>("Link");
+
+                    b.Property<string>("LinkType");
 
                     b.Property<string>("UserId");
 
@@ -35,7 +43,7 @@ namespace BSK_proj2.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Photos");
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -218,10 +226,10 @@ namespace BSK_proj2.Data.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("BSK_proj2.Models.Photo", b =>
+            modelBuilder.Entity("BSK_proj2.Models.Image", b =>
                 {
                     b.HasOne("BSK_proj2.ApplicationUser", "User")
-                        .WithMany("Photos")
+                        .WithMany("Images")
                         .HasForeignKey("UserId");
                 });
 

@@ -1,13 +1,14 @@
-﻿<!--{
-    ViewData["Title"] = "About";
+﻿{
+@ViewData["Title"] = "About";
 }
 <h2>ViewData["Title"]</h2>-->
 
-@ViewData["Message"]
+
 @model UploadedImage
-<form action="/Home/Upload" method="post">
+<form asp-controller="Home" asp-action="Upload" method="post" enctype="multipart/form-data">
     <!--Select upload moethod-->
-    <input type="radio" name="image_choice" value="uplaod" id="upload" checked />
+    <!--toDo: disallow changing uploaded img, while chosen link and vice versa-->
+    <input type="radio" name="image_choice" value="upload" id="upload" checked />
     <label for="upload">Upload Image:</label>
     <input asp-for="uploaded_img" />
     <br />
@@ -17,8 +18,9 @@
     <br />
 
     <!--Set access-->
+    <!--toDo: disallow changing comment and like, when private-->
     Access type:
-    <select asp-for="access"></select>
+    <select asp-for="access" asp-items="Model.accessOptions"></select>
     <br />
 
     <!--Comments-->
@@ -32,3 +34,4 @@
     <!--Submit-->
     <input type="submit" value="Save">
 </form>
+@ViewData["Message"]

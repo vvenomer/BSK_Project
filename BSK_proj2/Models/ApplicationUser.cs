@@ -6,6 +6,6 @@ namespace BSK_proj2
 {
     public class ApplicationUser : IdentityUser
     {
-        public virtual ICollection<Photo> Photos { get; set; }
+        public virtual ICollection<Image> Images { get; set; }
     }
 }
