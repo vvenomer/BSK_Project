@@ -1,7 +1,34 @@
-﻿@{
+﻿<!--{
     ViewData["Title"] = "About";
 }
-<h2>@ViewData["Title"]</h2>
-<h3>@ViewData["Message"]</h3>
+<h2>ViewData["Title"]</h2>-->
 
-<p>Use this area to provide additional information.</p>
+@ViewData["Message"]
+@model UploadedImage
+<form action="/Home/Upload" method="post">
+    <!--Select upload moethod-->
+    <input type="radio" name="image_choice" value="uplaod" id="upload" checked />
+    <label for="upload">Upload Image:</label>
+    <input asp-for="uploaded_img" />
+    <br />
+    <input type="radio" name="image_choice" value="link" id="link" />
+    <label for="link">Link Image:</label>
+    <br /><input asp-for="linked_img" />
+    <br />
+
+    <!--Set access-->
+    Access type:
+    <select asp-for="access"></select>
+    <br />
+
+    <!--Comments-->
+    Allow Commenting <input asp-for="comment" />
+    <br />
+
+    <!--Likes-->
+    Allow Liking <input asp-for="like" />
+    <br />
+
+    <!--Submit-->
+    <input type="submit" value="Save">
+</form>

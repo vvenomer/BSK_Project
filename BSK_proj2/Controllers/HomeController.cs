@@ -22,6 +22,7 @@ namespace BSK_proj2.Controllers
             return View();
         }
 
+        [HttpGet]
         public IActionResult Upload()
         {
             //var users = dBContext.Users.ToList();
@@ -31,13 +32,30 @@ namespace BSK_proj2.Controllers
             return View();
         }
 
-        public async System.Threading.Tasks.Task<IActionResult> Browse()
+        [HttpPost]
+        public IActionResult Upload(UploadedImage image)
         {
-            Photo photo = new Photo();
+            //process image
+            if (ModelState.IsValid)
+            {
+                ViewData["Message"] = "Yay";
+                return View();
+            }
+            else
+            {
+                ViewData["Message"] = "Nay";
+                return View();
+            }
+        }
+
+        public  IActionResult Browse()
+        {
+            /*Photo photo = new Photo();
             photo.Link = "google.com";
             photo.User = await userManager.GetUserAsync(HttpContext.User);
             dBContext.Photos.Add(photo);
-            ViewData["Message"] = "Your contact page.";
+            dBContext.SaveChanges();*/
+            //ViewData["Message"] = "Your contact page.";
 
             return View();
         }
