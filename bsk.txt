@@ -1,0 +1,14 @@
+upload image
+	if not logged in 
+		-> link to log in page
+		-> else allow upload
+			save pic
+			save info in db along with user name/id
+browse
+	personal
+		if not logged in
+			-> redirect to home
+			-> list all with user name/id tagged
+	general
+		list all with public tag
+			allow comments / likes
