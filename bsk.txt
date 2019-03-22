@@ -17,5 +17,5 @@ browse
 doTo: 
 
 after clicking upload while not logged in -> add message, that would explain redirection
-improve processing sent image
-improve form
+improve processing sent image (seperate folder for users, check if link is image)
+improve form (...)

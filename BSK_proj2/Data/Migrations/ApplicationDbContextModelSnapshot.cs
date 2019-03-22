@@ -15,7 +15,7 @@ namespace BSK_proj2.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -29,11 +29,15 @@ namespace BSK_proj2.Data.Migrations
 
                     b.Property<bool>("Comment");
 
+                    b.Property<string>("Description");
+
                     b.Property<bool>("Like");
 
                     b.Property<string>("Link");
 
                     b.Property<string>("LinkType");
+
+                    b.Property<string>("Name");
 
                     b.Property<string>("UserId");
 

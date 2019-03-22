@@ -10,6 +10,8 @@ namespace BSK_proj2.Models
 
         public string LinkType { get; set; }
         public string Link { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
         public string Access { get; set; }
         public bool Comment { get; set; }
         public bool Like { get; set; }

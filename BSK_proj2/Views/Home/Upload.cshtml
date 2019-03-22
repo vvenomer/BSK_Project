@@ -1,22 +1,30 @@
-﻿{
-@ViewData["Title"] = "About";
+﻿@{
+    ViewData["Title"] = "Upload";
 }
-<h2>ViewData["Title"]</h2>-->
+<h2>@ViewData["Title"]</h2>
 
 
 @model UploadedImage
 <form asp-controller="Home" asp-action="Upload" method="post" enctype="multipart/form-data">
-    <!--Select upload moethod-->
+    <!--Select upload method-->
     <!--toDo: disallow changing uploaded img, while chosen link and vice versa-->
     <input type="radio" name="image_choice" value="upload" id="upload" checked />
     <label for="upload">Upload Image:</label>
-    <input asp-for="uploaded_img" />
+    <input asp-for="uploaded_img" accept="image/*"/>
     <br />
     <input type="radio" name="image_choice" value="link" id="link" />
     <label for="link">Link Image:</label>
     <br /><input asp-for="linked_img" />
     <br />
 
+    <!--Rename-->
+    Custom Name (Optional):<br />
+    <input asp-for="name"/>
+    <br />
+    <!--Add description-->
+    Description:<br />
+    <textarea asp-for="desctiption" style="resize:none"></textarea>
+    <br />
     <!--Set access-->
     <!--toDo: disallow changing comment and like, when private-->
     Access type:

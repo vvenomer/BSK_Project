@@ -14,6 +14,11 @@ namespace BSK_proj2.Models
         [Url]
         public string linked_img { get; set; }
 
+        public string name { get; set; }
+
+        [MaxLength(1024)]
+        public string desctiption { get; set; }
+
         public string access { get; set; }
 
         public List<SelectListItem> accessOptions { get; } = new List<SelectListItem>

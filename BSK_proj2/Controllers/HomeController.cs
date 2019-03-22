@@ -6,6 +6,9 @@ using BSK_proj2.Data;
 using System.Linq;
 using System.IO;
 using System;
+using System.Net;
+using System.Globalization;
+using System.Collections.Generic;
 
 namespace BSK_proj2.Controllers
 {
@@ -14,6 +17,17 @@ namespace BSK_proj2.Controllers
         UserManager<ApplicationUser> userManager;
         ApplicationDbContext dBContext;
         Random random;
+
+        private bool IsImageUrl(string URL)
+        {
+            var req = HttpWebRequest.Create(URL);
+            req.Method = "HEAD";
+            using (var resp = req.GetResponse())
+            {
+                return resp.ContentType.ToLower(CultureInfo.InvariantCulture)
+                           .StartsWith("image/");
+            }
+        }
 
         public HomeController(UserManager<ApplicationUser> userManager, ApplicationDbContext dBContext)
         {
@@ -42,6 +56,7 @@ namespace BSK_proj2.Controllers
         [HttpPost]
         public async System.Threading.Tasks.Task<IActionResult> Upload(UploadedImage model)
         {
+            string error = null;
             //process image
             if (ModelState.IsValid)
             {
@@ -52,45 +67,68 @@ namespace BSK_proj2.Controllers
                 if (model.image_choice == "upload")
                 {
                     //seperate folder for specific users
-                    //check if file was actually sent
-                    var fileExt = Path.GetExtension(model.uploaded_img.FileName);
-                    var fileName = Path.GetFileNameWithoutExtension(model.uploaded_img.FileName);
-                    var filePath = "images/uploaded/" + fileName + "-" + random.Next().ToString("X4") + fileExt;
-                    image.Link = filePath;
-                    filePath = "wwwroot/" + filePath;
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    if (model.uploaded_img == null)
+                        error = "No file sent";
+                    else
                     {
-                        await model.uploaded_img.CopyToAsync(stream);
+                        var fileExt = Path.GetExtension(model.uploaded_img.FileName);
+                        var fileName = Path.GetFileNameWithoutExtension(model.uploaded_img.FileName);
+                        var filePath = "images/uploaded/" + fileName + "-" + random.Next().ToString("X4") + fileExt;
+                        image.Link = filePath;
+                        if (model.name == "")
+                            image.Name = fileName;
+                        filePath = "wwwroot/" + filePath;
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await model.uploaded_img.CopyToAsync(stream);
+                        }
+
                     }
                 }
                 else if (model.image_choice == "link")
                 {
-                    //check if it is actually image
-                    image.Link = model.linked_img;
+                    //check if it is actually image - will do in js
+                    if (model.linked_img == null)
+                        error = "No image linked";
+                    else
+                    {
+                        if (model.name == null)
+                            image.Name = Path.GetFileNameWithoutExtension(model.linked_img);
+                        
+                        image.Link = model.linked_img;
+                    }
                 }
                 else
                 {
-                    ViewData["Message"] = "Fatal Error!!!";
+                    error = "Wierd option selected.";
                 }
-                image.Access = model.access;
-                image.Comment = model.comment;
-                image.Like = model.like;
-                image.User = await userManager.GetUserAsync(HttpContext.User);
-                dBContext.Images.Add(image);
-                await dBContext.SaveChangesAsync();
-                ViewData["Message"] = "Image saved succesfully";
-
+                if (error == null)
+                {
+                    image.Description = model.desctiption;
+                    image.Access = model.access;
+                    image.Comment = model.comment;
+                    image.Like = model.like;
+                    image.User = await userManager.GetUserAsync(HttpContext.User);
+                    dBContext.Images.Add(image);
+                    await dBContext.SaveChangesAsync();
+                    ViewData["Message"] = "Image saved succesfully";
+                }
             }
             else
             {
-                ViewData["Message"] = "Something went wrong :(";
+                error = "Wrong form model";
             }
-            return View(model);
+            if(error != null)
+                ViewData["Message"] = "<span>Something went wrong :( Error message is: " + error + "</span>";
+            return View( new object[]{ model, error==null});
         }
 
         public  IActionResult Browse()
         {
-            return View();
+            var model = dBContext.Images.Where(x => x.Access == "public").ToList();
+
+
+            return View(model);
         }
 
         public IActionResult Collection()

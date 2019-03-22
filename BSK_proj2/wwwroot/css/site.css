@@ -28,6 +28,16 @@ body {
     margin: 15px;
 }
 
+.success
+{
+    color: green;
+}
+.fail
+{
+    color: red;
+}
+
+
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
