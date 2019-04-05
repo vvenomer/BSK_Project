@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> userManager
+
+@{
+    ViewData["Title"] = "Image";
+}
+
+@model Image
+<h2>@ViewData["Title"] - @Model.Name</h2>
+
+
+<img src="@Model.Link" /><br />
+@if (userManager.GetUserId(User) == Model.User.ToString ())
+{
+    <select>
+        @if (Model.Access == "public")
+        {
+            <option selected>Public</option>
+            <option>Private</option>
+        }
+        else
+        {
+            <option>Public</option>
+            <option selected>Private</option>
+        }
+    </select>
+    <textarea>
+        @Model.Description
+    </textarea>
+}
+else
+{
+    @Model.Access<br />
+    @Model.Description <br/>
+}

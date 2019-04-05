@@ -4,11 +4,15 @@
 }
 <h2>@ViewData["Title"]</h2>
 
-@model List<Image>
-@foreach(var x in Model)
-{
-    <div>
-        <img src="@x.Link" width="100" height="100"/>
-        @x.Name
-    </div>
-}
+<div id="div_table_container">
+    @model List<Image>
+    @foreach (var x in Model)
+    {
+        <div class="div_table_cell">
+            <a href="Image/@x.ID-@x.Name">
+                <img src="@x.Link" width="100" height="100" style="background-size:cover" /><br />
+                @x.Name
+            </a>
+        </div>
+    }
+</div>

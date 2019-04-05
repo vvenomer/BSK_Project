@@ -6,9 +6,6 @@ using BSK_proj2.Data;
 using System.Linq;
 using System.IO;
 using System;
-using System.Net;
-using System.Globalization;
-using System.Collections.Generic;
 
 namespace BSK_proj2.Controllers
 {
@@ -17,17 +14,6 @@ namespace BSK_proj2.Controllers
         UserManager<ApplicationUser> userManager;
         ApplicationDbContext dBContext;
         Random random;
-
-        private bool IsImageUrl(string URL)
-        {
-            var req = HttpWebRequest.Create(URL);
-            req.Method = "HEAD";
-            using (var resp = req.GetResponse())
-            {
-                return resp.ContentType.ToLower(CultureInfo.InvariantCulture)
-                           .StartsWith("image/");
-            }
-        }
 
         public HomeController(UserManager<ApplicationUser> userManager, ApplicationDbContext dBContext)
         {
@@ -64,10 +50,11 @@ namespace BSK_proj2.Controllers
                 Image image = new Image();
 
                 image.LinkType = model.image_choice;
+                image.Name = model.name;
                 if (model.image_choice == "upload")
                 {
                     //seperate folder for specific users
-                    if (model.uploaded_img == null)
+                    if (model.uploaded_img == null) //can that even be null
                         error = "No file sent";
                     else
                     {
@@ -88,11 +75,11 @@ namespace BSK_proj2.Controllers
                 else if (model.image_choice == "link")
                 {
                     //check if it is actually image - will do in js
-                    if (model.linked_img == null)
+                    if (model.linked_img == null) //can that even be null
                         error = "No image linked";
                     else
                     {
-                        if (model.name == null)
+                        if (model.name == "")
                             image.Name = Path.GetFileNameWithoutExtension(model.linked_img);
                         
                         image.Link = model.linked_img;
@@ -120,20 +107,30 @@ namespace BSK_proj2.Controllers
             }
             if(error != null)
                 ViewData["Message"] = "<span>Something went wrong :( Error message is: " + error + "</span>";
-            return View( new object[]{ model, error==null});
+            return View( /*new object[]{*/ model/*, error==null}*/);
         }
 
         public  IActionResult Browse()
         {
             var model = dBContext.Images.Where(x => x.Access == "public").ToList();
 
-
             return View(model);
         }
 
         public IActionResult Collection()
         {
-            return View();
+            var user = userManager.GetUserAsync(HttpContext.User).GetAwaiter();
+            var model = dBContext.Images.Where(x => x.User == user.GetResult()).ToList();
+
+            return View("Browse", model);
+        }
+
+        [Route("Home/Image/{id:int}-{name}")]
+        public IActionResult ViewImage(int id, string name)
+        {
+            var model = dBContext.Images.Where( x => (x.ID == id) && (x.Name == name) ).ToList();
+
+            return View(model[0]);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

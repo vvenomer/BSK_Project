@@ -28,6 +28,17 @@ body {
     margin: 15px;
 }
 
+#div_table_container
+{
+    min-width: 100%;
+    /*display: ;*/
+}
+.div_table_cell
+{
+    float:left
+    width: 100px;
+    height: 100px;
+}
 .success
 {
     color: green;
