@@ -9,6 +9,11 @@ using System;
 
 namespace BSK_proj2.Controllers
 {
+    public struct ImagePlusUser
+    {
+        public Image Image;
+        public string user;
+    }
     public class HomeController : Controller
     {
         UserManager<ApplicationUser> userManager;
@@ -54,15 +59,15 @@ namespace BSK_proj2.Controllers
                 if (model.image_choice == "upload")
                 {
                     //seperate folder for specific users
-                    if (model.uploaded_img == null) //can that even be null
+                    if (model.uploaded_img == null)
                         error = "No file sent";
                     else
                     {
                         var fileExt = Path.GetExtension(model.uploaded_img.FileName);
                         var fileName = Path.GetFileNameWithoutExtension(model.uploaded_img.FileName);
-                        var filePath = "images/uploaded/" + fileName + "-" + random.Next().ToString("X4") + fileExt;
+                        var filePath = "/images/uploaded/" + fileName + "-" + random.Next().ToString("X4") + fileExt;
                         image.Link = filePath;
-                        if (model.name == "")
+                        if (model.name == null)
                             image.Name = fileName;
                         filePath = "wwwroot/" + filePath;
                         using (var stream = new FileStream(filePath, FileMode.Create))
@@ -79,7 +84,7 @@ namespace BSK_proj2.Controllers
                         error = "No image linked";
                     else
                     {
-                        if (model.name == "")
+                        if (model.name == null)
                             image.Name = Path.GetFileNameWithoutExtension(model.linked_img);
                         
                         image.Link = model.linked_img;
@@ -128,9 +133,10 @@ namespace BSK_proj2.Controllers
         [Route("Home/Image/{id:int}-{name}")]
         public IActionResult ViewImage(int id, string name)
         {
-            var model = dBContext.Images.Where( x => (x.ID == id) && (x.Name == name) ).ToList();
+            var model = dBContext.Images.First( x => (x.ID == id) && (x.Name == name) );
+            dBContext.Entry(model).Reference(x => x.User).Load();
 
-            return View(model[0]);
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

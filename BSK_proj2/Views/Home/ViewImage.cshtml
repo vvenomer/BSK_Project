@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using BSK_proj2.Controllers
 @inject UserManager<ApplicationUser> userManager
 
 @{
@@ -9,8 +10,9 @@
 <h2>@ViewData["Title"] - @Model.Name</h2>
 
 
-<img src="@Model.Link" /><br />
-@if (userManager.GetUserId(User) == Model.User.ToString ())
+<img src="@Model.Link" style="max-width:100%;"/><br />
+
+@if (userManager.GetUserId(User) == Model.User.Id)
 {
     <select>
         @if (Model.Access == "public")
@@ -24,12 +26,10 @@
             <option selected>Private</option>
         }
     </select>
-    <textarea>
-        @Model.Description
-    </textarea>
+    <textarea>@Model.Description</textarea>
 }
 else
 {
     @Model.Access<br />
-    @Model.Description <br/>
+    @Model.Description <br />
 }
