@@ -6,6 +6,8 @@ namespace BSK_proj2
 {
     public class ApplicationUser : IdentityUser
     {
-        public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<Comment> CommentsOwner { get; set; }
+        public virtual ICollection<Permission<Comment>> CommentPermissions { get; set; }
+        public virtual ICollection<Permission<Image>> ImagePermissions { get; set; }
     }
 }

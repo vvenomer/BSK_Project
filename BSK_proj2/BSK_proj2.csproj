@@ -11,6 +11,8 @@
     <Compile Remove="Data\Migrations\20190322121826_AddedImages.Designer.cs" />
     <Compile Remove="Data\Migrations\20190322123312_AddedImages2.cs" />
     <Compile Remove="Data\Migrations\20190322123312_AddedImages2.Designer.cs" />
+    <Compile Remove="Data\Migrations\20190609112556_Likes.cs" />
+    <Compile Remove="Data\Migrations\20190609112556_Likes.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

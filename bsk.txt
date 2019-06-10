@@ -1,21 +1,3 @@
-upload image
-	if not logged in 
-		-> link to log in page
-		-> else allow upload
-			save pic
-			save info in db along with user name/id
---done--
-browse
-	personal
-		if not logged in
-			-> redirect to home
-			-> list all with user name/id tagged
-	general
-		list all with public tag
-			allow comments / likes
-			
-doTo: 
-
-after clicking upload while not logged in -> add message, that would explain redirection
-improve processing sent image (seperate folder for users, check if link is image)
-improve form (...)
+kilka tabel - komentarze
+Tunel SSL
+dokumentacja

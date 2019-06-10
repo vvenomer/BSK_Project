@@ -4,43 +4,22 @@ using BSK_proj2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BSK_proj2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190607211712_Permissions")]
+    partial class Permissions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("BSK_proj2.Models.Comment", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Body");
-
-                    b.Property<int?>("ImageID");
-
-                    b.Property<string>("OwnerId");
-
-                    b.Property<string>("Title");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ImageID");
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Comments");
-                });
 
             modelBuilder.Entity("BSK_proj2.Models.Image", b =>
                 {
@@ -65,37 +44,6 @@ namespace BSK_proj2.Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("BSK_proj2.Models.Permission<BSK_proj2.Models.Comment>", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ObjectID");
-
-                    b.Property<string>("UserId");
-
-                    b.Property<bool>("delete");
-
-                    b.Property<bool>("give");
-
-                    b.Property<bool>("owner");
-
-                    b.Property<bool>("read");
-
-                    b.Property<bool>("take");
-
-                    b.Property<bool>("write");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ObjectID");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CommentPermissions");
                 });
 
             modelBuilder.Entity("BSK_proj2.Models.Permission<BSK_proj2.Models.Image>", b =>
@@ -307,28 +255,6 @@ namespace BSK_proj2.Data.Migrations
                     b.ToTable("ApplicationUser");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
-                });
-
-            modelBuilder.Entity("BSK_proj2.Models.Comment", b =>
-                {
-                    b.HasOne("BSK_proj2.Models.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageID");
-
-                    b.HasOne("BSK_proj2.ApplicationUser", "Owner")
-                        .WithMany("CommentsOwner")
-                        .HasForeignKey("OwnerId");
-                });
-
-            modelBuilder.Entity("BSK_proj2.Models.Permission<BSK_proj2.Models.Comment>", b =>
-                {
-                    b.HasOne("BSK_proj2.Models.Comment", "Object")
-                        .WithMany("LikePermissions")
-                        .HasForeignKey("ObjectID");
-
-                    b.HasOne("BSK_proj2.ApplicationUser", "User")
-                        .WithMany("CommentPermissions")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("BSK_proj2.Models.Permission<BSK_proj2.Models.Image>", b =>

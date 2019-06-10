@@ -1,0 +1,96 @@
+﻿@model BSK_proj2.Models.Comment
+@{
+    ViewData["Title"] = "Comment";
+}
+<h4>@ViewData["Title"]</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+
+        @if (ViewBag.Perm.write)
+        {
+            <form asp-action="Comment">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ID" />
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Body" class="control-label"></label>
+                    <input asp-for="Body" class="form-control" />
+                    <span asp-validation-for="Body" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </form>
+        }
+        @if (ViewBag.Perm.delete)
+        {
+            <hr />
+            <h3>Do You want to delete this @ViewData["Title"]?</h3>
+            <form asp-controller="Home" asp-action="DeleteConfirmed" method="post">
+                <input type="submit" value="Delete" />
+            </form>
+        }
+        @if (ViewBag.Perm.give)
+        {
+            <hr />
+            <h3>Set Permissions</h3>
+            @foreach (var perm in ViewBag.Permissions)
+            {
+                <span>User:@perm.User.UserName Permissions: </span>
+
+                if (perm.write == true)
+                {
+                    <span>W</span>
+                }
+                if (perm.delete == true)
+                {
+                    <span>D</span>
+                }
+                if (perm.give == true)
+                {
+                    <span>G</span>
+                }
+                if (perm.take == true)
+                {
+                    <span>T</span>
+                }
+                <br />
+            }
+            <form asp-controller="Home" asp-action="UpdatePerm" method="post">
+
+                <select name="selectedUser">
+                    @foreach (var users in ViewBag.UsersThatCanTake)
+                    {
+                        <option value="@users.UserName">@users.UserName</option>
+                    }
+                </select>
+                @if (ViewBag.Perm.write)
+                {
+                    <input id="write" type="checkbox" name="write" value="write" />
+                    <label for="write">W</label>
+                }
+                @if (ViewBag.Perm.delete)
+                {
+                    <input id="delete" type="checkbox" name="delete" value="delete" />
+                    <label for="delete">D</label>
+                }
+                @if (ViewBag.Perm.give)
+                {
+                    <input id="give" type="checkbox" name="give" value="give" />
+                    <label for="give">G</label>
+                }
+                @if (ViewBag.Perm.owner)
+                {
+                    <input id="take" type="checkbox" name="take" value="take" />
+                    <label for="take">T</label>
+                }
+                <input type="submit" value="Update Permissions" />
+            </form>
+        }
+    </div>
+</div>

@@ -10,26 +10,161 @@
 <h2>@ViewData["Title"] - @Model.Name</h2>
 
 
-<img src="@Model.Link" style="max-width:100%;"/><br />
+<img src="@Model.Link" style="max-width:100%;" /><br />
 
-@if (userManager.GetUserId(User) == Model.User.Id)
+@if (Model.Like)
 {
-    <select>
-        @if (Model.Access == "public")
-        {
-            <option selected>Public</option>
-            <option>Private</option>
-        }
-        else
-        {
-            <option>Public</option>
-            <option selected>Private</option>
-        }
-    </select>
-    <textarea>@Model.Description</textarea>
+    <hr />
+    <h3>Like</h3>
+    <input type="button" value="Likes" />@ViewData["Likes"]
+    <input type="button" value="Dislikes" />@ViewData["Dislikes"]
+
 }
-else
+
+<hr />
+<h3>Information</h3>
+<span>Owner:</span> @ViewData["Owner"]<br />
+
+@if (ViewBag.Perm.write)
 {
-    @Model.Access<br />
-    @Model.Description <br />
+    <form asp-controller="Home" asp-action="ViewImage" method="post">
+
+        <select asp-for="Access">
+            @if (Model.Access == "public")
+            {
+                <option value="public" selected>Public</option>
+                <option value="private">Private</option>
+            }
+            else
+            {
+                <option value="public">Public</option>
+                <option value="private" selected>Private</option>
+            }
+        </select><br />
+        Description:<br />
+        <textarea asp-for="Description" class="form-control">@Model.Description</textarea><br />
+        <label asp-for="Comment" class="control-label"></label>
+        <input asp-for="Comment" />
+        <label asp-for="Like" class="control-label"></label>
+        <input asp-for="Like" />
+        <input type="submit" value="Save" />
+    </form>
+}
+else if (ViewBag.Perm.read)
+{
+    <span>Description:</span> @Model.Description <br />
+    <span>Access:</span> @Model.Access<br />
+}
+@if (ViewBag.Perm.delete)
+{
+    <hr />
+    <h3>Do You want to delete this @ViewData["Title"]?</h3>
+    <form asp-controller="Home" asp-action="DeleteConfirmed" method="post">
+        <input type="submit" value="Delete" />
+    </form>
+}
+@if (ViewBag.Perm.give)
+{
+    <hr />
+    <h3>Set Permissions</h3>
+    @foreach (var perm in ViewBag.Permissions)
+    {
+        <span>User:@perm.User.UserName Permissions: </span>
+
+        if (perm.read == true)
+        {
+            <span>R</span>
+        }
+        if (perm.write == true)
+        {
+            <span>W</span>
+        }
+        if (perm.delete == true)
+        {
+            <span>D</span>
+        }
+        if (perm.give == true)
+        {
+            <span>G</span>
+        }
+        if (perm.take == true)
+        {
+            <span>T</span>
+        }
+        <br />
+    }
+    <form asp-controller="Home" asp-action="UpdatePerm" method="post">
+
+        <select name="selectedUser">
+            @foreach (var users in ViewBag.UsersThatCanTake)
+            {
+                <option value="@users.UserName">@users.UserName</option>
+            }
+        </select>
+        @if (ViewBag.Perm.read)
+        {
+            <input id="read" type="checkbox" name="read" value="read" />
+            <label for="read">R</label>
+        }
+        @if (ViewBag.Perm.write)
+        {
+            <input id="write" type="checkbox" name="write" value="write" />
+            <label for="write">W</label>
+        }
+        @if (ViewBag.Perm.delete)
+        {
+            <input id="delete" type="checkbox" name="delete" value="delete" />
+            <label for="delete">D</label>
+        }
+        @if (ViewBag.Perm.give)
+        {
+            <input id="give" type="checkbox" name="give" value="give" />
+            <label for="give">G</label>
+        }
+        @if (ViewBag.Perm.owner)
+        {
+            <input id="take" type="checkbox" name="take" value="take" />
+            <label for="take">T</label>
+        }
+        <input type="submit" value="Update Permissions" />
+    </form>
+}
+@ViewData["Message"]
+@if (Model.Comment)
+{
+    <hr />
+    <h3>Comments</h3>
+    if ((bool)ViewData["LoggedIn"])
+    {
+        <form asp-controller="Home" asp-action="Comment" method="post"> 
+            Title: <input type="text" name="title" /><br />
+            Body:<br />
+            <textarea name="body"></textarea>
+            <input type="submit" value="Post" />
+        </form>
+    }
+    <hr />
+    foreach (var comment in ViewBag.Comments)
+    {
+        <h4>
+            <div style="display:flex;">
+                <div style="flex:2">
+                    @comment.c.Owner.UserName
+                </div>
+                <div style="flex:6">
+                    <b>@comment.c.Title</b>
+                </div>
+                <div style="flex:2">
+                    @if (comment.p)
+                    {
+                        <a asp-route-id="@Model.ID" asp-route-name="@Model.Name" asp-route-idc="@comment.c.ID" asp-controller="Home" asp-action="Comment">Edit</a>
+                    }
+                </div>
+            </div>
+        </h4>
+        <div style="margin-left: 10px;">
+            @comment.c.Body
+        </div>
+        <hr />
+    }
 }

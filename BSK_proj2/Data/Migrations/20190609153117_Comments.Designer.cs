@@ -4,14 +4,16 @@ using BSK_proj2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BSK_proj2.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190609153117_Comments")]
+    partial class Comments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,15 +31,11 @@ namespace BSK_proj2.Data.Migrations
 
                     b.Property<int?>("ImageID");
 
-                    b.Property<string>("OwnerId");
-
                     b.Property<string>("Title");
 
                     b.HasKey("ID");
 
                     b.HasIndex("ImageID");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Comments");
                 });
@@ -314,10 +312,6 @@ namespace BSK_proj2.Data.Migrations
                     b.HasOne("BSK_proj2.Models.Image", "Image")
                         .WithMany()
                         .HasForeignKey("ImageID");
-
-                    b.HasOne("BSK_proj2.ApplicationUser", "Owner")
-                        .WithMany("CommentsOwner")
-                        .HasForeignKey("OwnerId");
                 });
 
             modelBuilder.Entity("BSK_proj2.Models.Permission<BSK_proj2.Models.Comment>", b =>

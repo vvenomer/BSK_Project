@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BSK_proj2.Models
@@ -16,7 +17,6 @@ namespace BSK_proj2.Models
         public bool Comment { get; set; }
         public bool Like { get; set; }
 
-        [ForeignKey("UserId")]
-        public virtual ApplicationUser User { get; set; }
+        public virtual ICollection<Permission<Image>> ImagePermissions { get; set; }
     }
 }
