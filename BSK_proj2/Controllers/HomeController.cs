@@ -38,7 +38,7 @@ namespace BSK_proj2.Controllers
         public IActionResult Upload()
         {
             if (userManager.GetUserId(HttpContext.User) == null)
-                return RedirectToAction("Account/Login", "Identity");
+                return Redirect("/Identity/Account/Login");
 
             var model = new UploadedImage() { access = "public" };
             return View(model);
