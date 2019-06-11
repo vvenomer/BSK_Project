@@ -312,7 +312,7 @@ namespace BSK_proj2.Controllers
                     permission.read = permission.write = permission.delete = permission.give = permission.take = false;
                     dBContext.Update(permission);
                 }
-                else newPermission.take = false;
+                
 
                 dBContext.Update(newPermission);
             }
