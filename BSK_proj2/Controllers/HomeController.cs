@@ -186,7 +186,7 @@ namespace BSK_proj2.Controllers
             else
                 return RedirectToAction(nameof(Error));
 
-            ViewData["Owner"] = dBContext.ImagePermissions.Include(x => x.User).First(x => x.owner).User.UserName;
+            ViewData["Owner"] = dBContext.ImagePermissions.Include(x => x.User).First(x => x.Object==model && x.owner).User.UserName;
 
 
 
