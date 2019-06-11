@@ -305,10 +305,10 @@ namespace BSK_proj2.Controllers
                 newPermission.write = write;
                 newPermission.delete = delete;
                 newPermission.give = give;
+                newPermission.take = take;
 
                 if (!owner_perm)
                 {
-                    newPermission.take = take;
                     permission.read = permission.write = permission.delete = permission.give = permission.take = false;
                     dBContext.Update(permission);
                 }
